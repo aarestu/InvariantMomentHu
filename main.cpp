@@ -44,7 +44,6 @@ void invariantMomentHu(const Mat src, vector<double>& result)
             m00 += src.at<uchar>(i,j);
             m10 += x * src.at<uchar>(i,j);
             m01 += y * src.at<uchar>(i,j);
-
         }
     }
 
@@ -66,7 +65,6 @@ void invariantMomentHu(const Mat src, vector<double>& result)
             m03 += pow( ( y - ybar ), 3 ) * src.at<uchar>(i,j) / pow( m00, 2.5 );
             m12 += ( x - xbar ) * pow( ( y - ybar ), 2 ) * src.at<uchar>(i,j) / pow( m00, 2.5 );
             m21 += pow( ( x - xbar ), 2 ) * ( y - ybar ) * src.at<uchar>(i,j) / pow( m00, 2.5 );
-
         }
     }
 
@@ -77,15 +75,15 @@ void invariantMomentHu(const Mat src, vector<double>& result)
     result.push_back(moment);
 
     //2
-    moment = pow( m20 + m02, 2 ) * 4 * pow( m11, 2);
+    moment = pow( m20 - m02, 2 ) + 4 * pow( m11, 2);
     result.push_back(moment);
 
     //3
-    moment = pow( m30 - 3 * m12, 2 ) * pow( 3 * m21 - m03, 2);
+    moment = pow( m30 - 3 * m12, 2 ) + pow( 3 * m21 - m03, 2);
     result.push_back(moment);
 
     //4
-    moment = pow( m30 + m12, 2 ) * pow( m21 - m03, 2);
+    moment = pow( m30 + m12, 2 ) + pow( m21 + m03, 2);
     result.push_back(moment);
 
     //5
@@ -94,13 +92,13 @@ void invariantMomentHu(const Mat src, vector<double>& result)
     result.push_back(moment);
 
     //6
-    moment = ( m20 - m02 )  * ( pow( m30 + m12, 2 ) - 3* pow( m21 - m03, 2) )
+    moment = ( m20 - m02 )  * ( pow( m30 + m12, 2 ) - pow( m21 + m03, 2) )
              + 4 * m11 * ( m30 + m12 ) * ( m21 + m03 );
     result.push_back(moment);
 
     //7
-    moment = ( 3 * m21 - m03 )  * ( m30 + m12 )  * ( pow( m30 + m12, 2 ) - 3 * pow( m21 + m03, 2) )
-             + ( 3 * m12 - m30 )  * ( m21 + m03 )  * ( 3 * pow( m30 + m12, 2 ) - pow( m21 + m03, 2) );
+    moment = ( 3 * m21 - m03 )  * ( m21 + m03 )  * ( 3 * pow( m30 + m12, 2 ) - pow( m21 + m03, 2) )
+             - ( m30 + 3 * m12 )  * ( m21 + m03 )  * ( 3 * pow( m30 + m12, 2 ) - pow( m21 + m03, 2) );
     result.push_back(moment);
 }
 
@@ -117,7 +115,6 @@ int main(int /*argc*/, char /*argv*/)
     vector<double> huMoments;
 
 
-
     Mat g1 = imread("D:\\Project\\C++\\CitraDigital\\gambar1.jpg");
     rgb2gray(g1, g1);
     invariantMomentHu(g1, huMoments);
@@ -127,7 +124,7 @@ int main(int /*argc*/, char /*argv*/)
     imshow("gambar1", g1);
 
     huMoments.clear();
-    Mat g2 = imread("D:\\Project\\C++\\CitraDigital\\gambar2.jpg");
+    Mat g2 = imread("D:\\Project\\C++\\CitraDigital\\edge.jpg");
     rgb2gray(g2, g2);
     invariantMomentHu(g2, huMoments);
     printMoments("gambar 2 : " ,huMoments);
@@ -136,10 +133,10 @@ int main(int /*argc*/, char /*argv*/)
     imshow("gambar2", g2);
 
     huMoments.clear();
-    Mat g3 = imread("D:\\Project\\C++\\CitraDigital\\gambar3.jpg");
+    Mat g3 = imread("D:\\Project\\C++\\CitraDigital\\shapes.png");
     rgb2gray(g3, g3);
     invariantMomentHu(g3, huMoments);
-    printMoments("gambar 3 : " ,huMoments);
+    printMoments("gambar 3 : ", huMoments);
 
     namedWindow("gambar3");
     imshow("gambar3", g3);
